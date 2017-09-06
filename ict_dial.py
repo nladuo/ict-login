@@ -45,8 +45,8 @@ if __name__ == '__main__':
         exit(1)
 
     FNULL = open(os.devnull, 'w')
-    node_err = subprocess.call('which node', shell=True, stdout=FNULL)
-    nodejs_err = subprocess.call('which nodejs', shell=True, stdout=FNULL)
+    node_err = subprocess.call('which node', shell=True, stdout=FNULL, stderr=FNULL)
+    nodejs_err = subprocess.call('which nodejs', shell=True, stdout=FNULL, stderr=FNULL)
     if node_err == 0:
         node_cmd = "node"
     elif nodejs_err == 0:
@@ -99,10 +99,9 @@ if __name__ == '__main__':
         except Exception, e:
             print e
             print ip, "failed"
-    status = subprocess.call("ping -c 2 www.baidu.com",shell=True, stdout=FNULL)
+    status = subprocess.call("ping -c 2 www.baidu.com",shell=True, stdout=FNULL, stderr=FNULL)
     if status == 0:
-        print "login gateway successfully"
+        print "Connect internet well!!!"
     else:
-        print "login failed"
-
+        print "Login failed"
 
