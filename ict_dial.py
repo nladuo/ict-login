@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
         try:
             # request token jsonp data
-            token_jsonp = urllib2.urlopen("http://159.226.39.22/cgi-bin/get_challenge?callback=xxx&username=" + username + "&ip=" + ip).read()
+            token_jsonp = urllib2.urlopen("http://gw.ict.ac.cn/cgi-bin/get_challenge?callback=xxx&username=" + username + "&ip=" + ip).read()
             # parse token
             m = re.search("xxx\((.*)\)", token_jsonp)
             if m is None:
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
 
             # print conn_obj
-            conn_url = "http://159.226.39.22/cgi-bin/srun_portal?callback=xxx&" + urlencode(conn_obj) + "&_=1503984175899"
+            conn_url = "http://gw.ict.ac.cn/cgi-bin/srun_portal?callback=xxx&" + urlencode(conn_obj) + "&_=1503984175899"
             conn = urllib2.urlopen(conn_url).read()
             # print conn
         except Exception, e:
