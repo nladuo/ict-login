@@ -52,7 +52,7 @@ if __name__ == '__main__':
     elif nodejs_err == 0:
         node_cmd = "nodejs"
     else:
-        print "You need install nodejs runtime"
+        print "You need install nodejs runtime: https://nodejs.org/en/download/"
         exit(1)
 
 
