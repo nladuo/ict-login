@@ -11,7 +11,7 @@
 import sys
 import hashlib
 import hmac
-import urllib2
+import urllib.request
 from urllib import urlencode
 import os
 import re
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
         try:
             # request token jsonp data
-            token_jsonp = urllib2.urlopen("http://gw.ict.ac.cn/cgi-bin/get_challenge?callback=xxx&username=" + username + "&ip=" + ip).read()
+            token_jsonp = urllib.request.urlopen("http://gw.ict.ac.cn/cgi-bin/get_challenge?callback=xxx&username=" + username + "&ip=" + ip).read()
             # parse token
             m = re.search("xxx\((.*)\)", token_jsonp)
             if m is None:
@@ -85,14 +85,14 @@ if __name__ == '__main__':
 
             # print conn_obj
             conn_url = "http://gw.ict.ac.cn/cgi-bin/srun_portal?callback=xxx&" + urlencode(conn_obj) + "&_=1503984175899"
-            conn = urllib2.urlopen(conn_url).read()
+            conn = urllib.request.urlopen(conn_url).read()
             # print conn
-        except Exception, e:
-            print e
-            print ip, "failed"
+        except Exception as e:
+            print(e)
+            print(ip, "failed")
     status = subprocess.call("ping -c 2 www.baidu.com",shell=True, stdout=FNULL, stderr=FNULL)
     if status == 0:
-        print "Connect internet well!!!"
+        print("Connect internet well!!!")
     else:
-        print "Login failed"
+        print("Login failed")
 
