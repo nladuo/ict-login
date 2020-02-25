@@ -9,8 +9,13 @@
 需要:
 
 * 终端(Terminal)界面
-* python
-* nodejs，可在终端执行node命令。可选择二进制下载到PC，然后上传到服务器后配置PATH路径。
+* python3(无需nodejs)
+
+
+依赖:
+```
+pip3 install js2py
+```
 
 方法有两种，建议先使用第一种，确认无误后使用第二种保持长期连接:
 

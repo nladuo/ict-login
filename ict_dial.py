@@ -5,6 +5,9 @@
 # Author: Andrew(lichundian@gmail.com)
 # Date: 2017.08.31
 
+# modified by: nladuo
+# Date: 2020.02.25
+
 import sys
 import hashlib
 import hmac
@@ -13,8 +16,8 @@ from urllib import urlencode
 import os
 import re
 import json
-import subprocess
 import netifaces
+from js_lib import js_lib
 
 # The local server must connect the gateway directly
 # without other routers in the middle.
@@ -41,18 +44,7 @@ if __name__ == '__main__':
         username = sys.argv[1]
         password = sys.argv[2]
     else:
-        print "Usage: python ict_dial.py username password"
-        exit(1)
-
-    FNULL = open(os.devnull, 'w')
-    node_err = subprocess.call('which node', shell=True, stdout=FNULL, stderr=FNULL)
-    nodejs_err = subprocess.call('which nodejs', shell=True, stdout=FNULL, stderr=FNULL)
-    if node_err == 0:
-        node_cmd = "node"
-    elif nodejs_err == 0:
-        node_cmd = "nodejs"
-    else:
-        print "You need install nodejs runtime: https://nodejs.org/en/download/"
+        print("Usage: python ict_dial.py username password")
         exit(1)
 
 
@@ -75,9 +67,8 @@ if __name__ == '__main__':
 
             conn_obj = {}
             conn_obj["action"] = "login"
-            cmd = node_cmd + " ict_dial.js '" + info_origin_json + "' '" + token + "'"
-            # print cmd
-            conn_obj["info"] = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0][:-1]
+            conn_obj["info"] = "{SRBX1}" + js_lib.base64_encode(js_lib.encap(info_origin_json, token))
+
             hasher = hmac.new(token)
             hasher.update("")
             pass_md5 = hasher.hexdigest()

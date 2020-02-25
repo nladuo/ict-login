@@ -89,6 +89,6 @@ function encap ( str, key ) {
     return value
 }
 
-var args = process.argv.splice(2)
-var info = "{SRBX1}" + base64_encode(encap(args[0], args[1]))
-console.log(info)
+// var args = process.argv.splice(2)
+// var info = "{SRBX1}" + base64_encode(encap(args[0], args[1]))
+// console.log(info)
