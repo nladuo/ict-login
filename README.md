@@ -14,7 +14,7 @@
 
 依赖:
 ```
-pip3 install js2py
+pip3 install js2py netifaces
 ```
 
 方法有两种，建议先使用第一种，确认无误后使用第二种保持长期连接:

@@ -12,12 +12,16 @@ import sys
 import hashlib
 import hmac
 import urllib.request
-from urllib import urlencode
+from urllib.parse import quote
 import os
 import re
 import json
 import netifaces
 from js_lib import js_lib
+import subprocess
+import ssl  
+  
+ssl._create_default_https_context = ssl._create_unverified_context 
 
 # The local server must connect the gateway directly
 # without other routers in the middle.
@@ -47,13 +51,14 @@ if __name__ == '__main__':
         print("Usage: python ict_dial.py username password")
         exit(1)
 
+    FNULL = open(os.devnull, 'w')
 
     for _ip in getips():
         ip = _ip
 
         try:
             # request token jsonp data
-            token_jsonp = urllib.request.urlopen("http://gw.ict.ac.cn/cgi-bin/get_challenge?callback=xxx&username=" + username + "&ip=" + ip).read()
+            token_jsonp = urllib.request.urlopen("http://gw.ict.ac.cn/cgi-bin/get_challenge?callback=xxx&username=" + username + "&ip=" + ip).read().decode("utf-8")
             # parse token
             m = re.search("xxx\((.*)\)", token_jsonp)
             if m is None:
@@ -69,12 +74,12 @@ if __name__ == '__main__':
             conn_obj["action"] = "login"
             conn_obj["info"] = "{SRBX1}" + js_lib.base64_encode(js_lib.encap(info_origin_json, token))
 
-            hasher = hmac.new(token)
-            hasher.update("")
+            hasher = hmac.new(token.encode("utf-8"))
+            hasher.update("".encode("utf-8"))
             pass_md5 = hasher.hexdigest()
             conn_obj["password"] = "{MD5}"+ pass_md5
             hasher = hashlib.sha1()
-            hasher.update(token + username + token + pass_md5 + token + acid + token + ip + token + n_param + token + type_param + token + conn_obj["info"])
+            hasher.update((token + username + token + pass_md5 + token + acid + token + ip + token + n_param + token + type_param + token + conn_obj["info"]).encode("utf-8"))
             conn_obj["chksum"] = hasher.hexdigest()
             conn_obj["n"] = n_param
             conn_obj["type"] = type_param
@@ -82,10 +87,13 @@ if __name__ == '__main__':
             conn_obj["username"] = username
             conn_obj["ip"] = ip
 
+            param = ""
+            for k in conn_obj.keys():
+                param += f"{k}={quote(conn_obj[k])}&"
 
             # print conn_obj
-            conn_url = "http://gw.ict.ac.cn/cgi-bin/srun_portal?callback=xxx&" + urlencode(conn_obj) + "&_=1503984175899"
-            conn = urllib.request.urlopen(conn_url).read()
+            conn_url = "http://gw.ict.ac.cn/cgi-bin/srun_portal?callback=xxx&" + param+ "&_=1503984175899"
+            conn = urllib.request.urlopen(conn_url).read().decode("utf-8")
             # print conn
         except Exception as e:
             print(e)
